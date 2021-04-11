@@ -42,16 +42,21 @@
                     <?php echo $_SESSION['success'];
                     unset($_SESSION['success']);
                     ?></div><?php
+                } elseif (isset($_SESSION['danger'])) {
+                ?> <div class="alert alert-success">
+                <?php echo $_SESSION['danger'];
+                unset($_SESSION['danger']);
+                ?></div><?php
                 }
                 ?>
-            <form action="">
+            <form action="login.php" method="post">
                 <div class="form-group">
-                    <label class="form-label" for="username">Email</label>
-                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="">
+                    <label class="form-label" for="username" >Email</label>
+                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="" name="login_email">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
-                    <input type="password" id="password" class="form-control" placeholder="" >
+                    <input type="password" id="password" class="form-control" placeholder="" name="login_password">
                 </div>
                 <div class="form-group text-left">
                     <div class="custom-control custom-checkbox">
