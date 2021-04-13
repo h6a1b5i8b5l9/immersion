@@ -6,7 +6,7 @@ if(!isset($_SESSION['email'])) {
 }
 $logged_user = is_email_in_db($_SESSION['email'], $pdo);
 
-$other_users = select_all_other_users($_SESSION['email'], $pdo);
+$all_users = select_all_users($pdo);
 
 ?>
 <!DOCTYPE html>
@@ -45,8 +45,12 @@ $other_users = select_all_other_users($_SESSION['email'], $pdo);
         </nav>
 
         <main id="js-page-content" role="main" class="page-content mt-3">
-<!--            <div class="alert alert-success">-->
-<!--                Профиль успешно обновлен.-->
+            <?php if(isset($_SESSION['success'])) {
+                ?> <div class="alert alert-success">
+                <?php echo $_SESSION['success'];
+                unset($_SESSION['success']);
+                ?></div><?php
+            } ?>
             </div>
             <div class="subheader">
                 <h1 class="subheader-title">
@@ -56,7 +60,7 @@ $other_users = select_all_other_users($_SESSION['email'], $pdo);
             <div class="row">
                 <div class="col-xl-12">
                     <?php if($logged_user['role'] == 'admin') {
-                       ?> <a class="btn btn-success" href="create_user.html">Добавить</a>
+                       ?> <a class="btn btn-success" href="page_create_user.php">Добавить</a>
                     <?php
                     }?>
 
@@ -76,75 +80,10 @@ $other_users = select_all_other_users($_SESSION['email'], $pdo);
             </div>
             <div class="row" id="js-contacts">
 
-                <div class="col-xl-4">
-                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="<?php echo strtolower($logged_user['name']) ?>">
-                        <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
-                            <div class="d-flex flex-row align-items-center">
-                                <span class="status status-warning mr-3">
-                                    <span class="rounded-circle profile-image d-block " style="background-image:url(<?php echo $logged_user['avatar'] ?>); background-size: cover;"></span>
-                                </span>
-                                <div class="info-card-text flex-1">
-                                    <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
-                                        <?php echo $logged_user['name'] ?>
-                                        <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
-                                        <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
-                                    </a>
 
-
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="edit.html">
-                                                <i class="fa fa-edit"></i>
-                                                Редактировать</a>
-                                            <a class="dropdown-item" href="security.html">
-                                                <i class="fa fa-lock"></i>
-                                                Безопасность</a>
-                                            <a class="dropdown-item" href="status.html">
-                                                <i class="fa fa-sun"></i>
-                                                Установить статус</a>
-                                            <a class="dropdown-item" href="media.html">
-                                                <i class="fa fa-camera"></i>
-                                                Загрузить аватар
-                                            </a>
-                                            <a href="#" class="dropdown-item" onclick="return confirm('are you sure?');">
-                                                <i class="fa fa-window-close"></i>
-                                                Удалить
-                                            </a>
-                                        </div>
-
-                                    <span class="text-truncate text-truncate-xl"><?php echo $logged_user['position'] ?></span>
-                                </div>
-                                <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
-                                    <span class="collapsed-hidden">+</span>
-                                    <span class="collapsed-reveal">-</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body p-0 collapse show">
-                            <div class="p-3">
-                                <a href="tel:<?php echo trim($logged_user['telephone'], " ") ?>" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                    <i class="fas fa-mobile-alt text-muted mr-2"></i> <?php echo $logged_user['telephone'] ?></a>
-                                <a href="mailto:<?php echo $logged_user['email'] ?>" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                    <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?php echo $logged_user['email'] ?></a>
-                                <address class="fs-sm fw-400 mt-4 text-muted">
-                                    <i class="fas fa-map-pin mr-2"></i> <?php echo $logged_user['address'] ?></address>
-                                <div class="d-flex flex-row">
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#4680C2">
-                                        <i class="fab fa-vk"></i>
-                                    </a>
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#38A1F3">
-                                        <i class="fab fa-telegram"></i>
-                                    </a>
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#E1306C">
-                                        <i class="fab fa-instagram"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <?php
-                foreach ($other_users as $user) { ?>
+                foreach ($all_users as $user) { ?>
                     <div class="col-xl-4">
                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="<?php echo strtolower($user['name']) ?>">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
@@ -155,13 +94,13 @@ $other_users = select_all_other_users($_SESSION['email'], $pdo);
                                 <div class="info-card-text flex-1">
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                         <?php echo $user['name'];
-                                        if($logged_user['role'] == 'admin') {
+                                        if($logged_user['role'] == 'admin'|| $user['email'] == $_SESSION['email']) {
                                         ?>
                                         <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                         <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                         <?php }?>
                                     </a>
-                                    <?php if($logged_user['role'] == 'admin') {
+                                    <?php if($logged_user['role'] == 'admin' || $user['email'] == $_SESSION['email']) {
                                         ?>
 
                                     <div class="dropdown-menu">
@@ -202,13 +141,13 @@ $other_users = select_all_other_users($_SESSION['email'], $pdo);
                                 <address class="fs-sm fw-400 mt-4 text-muted">
                                     <i class="fas fa-map-pin mr-2"></i> <?php echo $user['address'] ?></address>
                                 <div class="d-flex flex-row">
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#4680C2">
+                                    <a href="<?php echo $user['vk'] ?>" class="mr-2 fs-xxl" style="color:#4680C2">
                                         <i class="fab fa-vk"></i>
                                     </a>
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#38A1F3">
+                                    <a href="<?php echo $user['telegram'] ?>" class="mr-2 fs-xxl" style="color:#38A1F3">
                                         <i class="fab fa-telegram"></i>
                                     </a>
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#E1306C">
+                                    <a href="<?php echo $user['instagram'] ?>" class="mr-2 fs-xxl" style="color:#E1306C">
                                         <i class="fab fa-instagram"></i>
                                     </a>
                                 </div>
@@ -227,7 +166,7 @@ $other_users = select_all_other_users($_SESSION['email'], $pdo);
         <!-- BEGIN Page Footer -->
         <footer class="page-footer" role="contentinfo">
             <div class="d-flex align-items-center flex-1 text-muted">
-                <span class="hidden-md-down fw-700">2020 © Учебный проект</span>
+                <span class="hidden-md-down fw-700">2021 © Учебный проект</span>
             </div>
             <div>
                 <ul class="list-table m-0">
