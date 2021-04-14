@@ -15,6 +15,13 @@ function select_all_users($pdo) {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function get_user_by_id($id, $pdo) {
+    $sql = "SELECT * FROM users WHERE id=:id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['id'=>$id]);
+    return $statement->fetch(PDO::FETCH_ASSOC);
+}
+
 function set_flash_message($name, $message) {
     return $_SESSION[$name] = $message;
 }
@@ -30,24 +37,20 @@ function create_new_user($pdo, $email, $password) {
     $statement->execute(['email'=>$email, 'password'=>$password]);
 }
 
-function create_new_user2($pdo, $email, $password, $name, $id) {
-    $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password) WHERE id=:id";
+
+
+
+
+function set_common_info($pdo, $id, $name, $position, $address, $telephone) {
+    $sql = "UPDATE users SET name=:name, position=:position, address=:address, telephone=:telephone WHERE id=:id";
     $statement = $pdo->prepare($sql);
-    $statement->execute(['email'=>$email, 'password'=>$password, 'name'=>$name, 'id'=>$id]);
+    $statement->execute(['name'=>$name, 'position'=>$position, 'address'=>$address, 'telephone'=>$telephone, 'id' => $id]);
 }
 
-function update_new_user2($pdo, $email, $password, $address, $id) {
-    $sql = "UPDATE users SET address=:address, email=:email, password=:password WHERE id=:id";
+function set_avatar($pdo, $id, $avatar) {
+    $sql = "UPDATE users SET avatar=:avatar WHERE id=:id";
     $statement = $pdo->prepare($sql);
-    $statement->execute(['email'=>$email, 'password'=>$password, 'address'=>$address, 'id'=>$id]);
-}
-
-
-
-function set_common_info($pdo, $id, $name, $position, $address, $telephone, $avatar) {
-    $sql = "UPDATE users SET name=:name, position=:position, address=:address, telephone=:telephone, avatar=:avatar WHERE id=:id";
-    $statement = $pdo->prepare($sql);
-    $statement->execute(['name'=>$name, 'position'=>$position, 'address'=>$address, 'telephone'=>$telephone, 'avatar'=>$avatar, 'id' => $id]);
+    $statement->execute(['avatar'=>$avatar, 'id' => $id]);
 }
 
 function set_soc_net($pdo, $id, $vk, $telegram, $instagram) {
