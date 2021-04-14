@@ -3,7 +3,16 @@ session_start();
 include 'functions.php';
 $pdo = new PDO("mysql:host=localhost;dbname=immersion", "root", "root");
 
-$user_id = $_SESSION['user_id'];
+$logged_user = is_email_in_db($_SESSION['email'], $pdo);
+
+if(!isset($_SESSION['email'])) {
+    redirect_to_page('login.php');
+}
+
+$user_id = $_GET['id'];
+if(!isset($user_id)) {
+    $user_id = $logged_user['id'];
+}
 $user = get_user_by_id($user_id, $pdo);
 ?>
 <!DOCTYPE html>

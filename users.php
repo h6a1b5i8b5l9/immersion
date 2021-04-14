@@ -89,7 +89,9 @@ $all_users = select_all_users($pdo);
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                             <div class="d-flex flex-row align-items-center">
                                 <span class="status status-success mr-3">
+                                    <a href="page_profile.php?id=<?php echo $user['id'] ?>">
                                     <span class="rounded-circle profile-image d-block " style="background-image:url(<?php echo $user['avatar'] ?>); background-size: cover;"></span>
+                                    </a>
                                 </span>
                                 <div class="info-card-text flex-1">
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
@@ -104,16 +106,16 @@ $all_users = select_all_users($pdo);
                                         ?>
 
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="edit.html">
+                                        <a class="dropdown-item" href="page_edit.php?id=<?php echo $user['id'] ?>">
                                             <i class="fa fa-edit"></i>
                     Редактировать</a>
-                                        <a class="dropdown-item" href="security.html">
+                                        <a class="dropdown-item" href="security.html?id=<?php echo $user['id'] ?>">
                                             <i class="fa fa-lock"></i>
                     Безопасность</a>
-                                        <a class="dropdown-item" href="status.html">
+                                        <a class="dropdown-item" href="status.html?id=<?php echo $user['id'] ?>">
                                             <i class="fa fa-sun"></i>
                     Установить статус</a>
-                                        <a class="dropdown-item" href="media.html">
+                                        <a class="dropdown-item" href="media.html?id=<?php echo $user['id'] ?>">
                                             <i class="fa fa-camera"></i>
                     Загрузить аватар
                     </a>

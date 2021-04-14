@@ -22,4 +22,4 @@ $_SESSION['user_id'] = $user_id;
 
 
 set_flash_message('success', 'Информация о пользователе обновлена!');
-redirect_to_page('page_profile.php');
+redirect_to_page("page_profile.php?id=$user_id");
