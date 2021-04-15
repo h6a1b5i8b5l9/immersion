@@ -109,17 +109,17 @@ $all_users = select_all_users($pdo);
                                         <a class="dropdown-item" href="page_edit.php?id=<?php echo $user['id'] ?>">
                                             <i class="fa fa-edit"></i>
                     Редактировать</a>
-                                        <a class="dropdown-item" href="security.html?id=<?php echo $user['id'] ?>">
+                                        <a class="dropdown-item" href="page_security.php?id=<?php echo $user['id'] ?>">
                                             <i class="fa fa-lock"></i>
                     Безопасность</a>
-                                        <a class="dropdown-item" href="status.html?id=<?php echo $user['id'] ?>">
+                                        <a class="dropdown-item" href="page_status.php?id=<?php echo $user['id'] ?>">
                                             <i class="fa fa-sun"></i>
                     Установить статус</a>
-                                        <a class="dropdown-item" href="media.html?id=<?php echo $user['id'] ?>">
+                                        <a class="dropdown-item" href="page_media.php?id=<?php echo $user['id'] ?>">
                                             <i class="fa fa-camera"></i>
                     Загрузить аватар
                     </a>
-                                        <a href="#" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                        <a href="delete_user.php?id=<?php echo $user['id'] ?>" class="dropdown-item" onclick="return confirm('are you sure?');">
                                             <i class="fa fa-window-close"></i>
                     Удалить
                                         </a>

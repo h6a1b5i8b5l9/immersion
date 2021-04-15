@@ -68,3 +68,15 @@ function set_soc_net($pdo, $id, $vk, $telegram, $instagram) {
 function upload_img($img, $path) {
     move_uploaded_file($img['tmp_name'], $path);
 }
+
+function set_status($pdo, $id, $status) {
+    $sql = "UPDATE users SET status=:status WHERE id=:id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['status'=>$status, 'id' => $id]);
+}
+
+function delete_user($pdo, $id) {
+    $sql = "DELETE FROM users WHERE id=:id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['id' => $id]);
+}
