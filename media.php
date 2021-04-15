@@ -8,10 +8,15 @@ if(!isset($_SESSION['email'])) {
     redirect_to_page('login.php');
 }
 
-
+$user_id = $_GET['id'];
 
 
 $avatar = $_FILES['avatar'];
+if($avatar['name'] == '') {
+    set_flash_message('danger', 'Аватар пользователя не выбран!');
+    redirect_to_page("page_media.php?id=$user_id");
+}
+
 $uploaddir = 'img/demo/avatars/';
 $uniqid = uniqid();
 $avatarPath = $uploaddir .$uniqid. basename($_FILES['avatar']['name']);
@@ -22,7 +27,7 @@ $avatarPath = $uploaddir .$uniqid. basename($_FILES['avatar']['name']);
 
 
 
-$user_id = $_GET['id'];
+
 
 
 

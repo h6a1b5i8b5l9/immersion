@@ -7,6 +7,9 @@ $pdo = new PDO("mysql:host=localhost;dbname=immersion", "root", "root");
 $edit_id = $_GET['id'];
 $logged_user = is_email_in_db($_SESSION['email'], $pdo);
 
+if(!isset($edit_id)) {
+    $edit_id = $logged_user['id'];
+}
 
 
 if(!isset($_SESSION['email'])) {
@@ -61,7 +64,14 @@ if(empty($user['avatar'])) {
                 <i class='subheader-icon fal fa-image'></i> Загрузить аватар
             </h1>
 
+
         </div>
+        <?php if(isset($_SESSION['danger'])) {
+            ?> <div class="alert alert-danger">
+            <?php echo $_SESSION['danger'];
+            unset($_SESSION['danger']);
+            ?></div><?php
+        } ?>
         <form action="media.php?id=<?php echo $edit_id ?>" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
