@@ -53,6 +53,12 @@ function set_avatar($pdo, $id, $avatar) {
     $statement->execute(['avatar'=>$avatar, 'id' => $id]);
 }
 
+function update_security($pdo, $id, $email, $password) {
+    $sql = "UPDATE users SET email=:email, password=:password WHERE id=:id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['email'=>$email, 'password'=>$password, 'id' => $id]);
+}
+
 function set_soc_net($pdo, $id, $vk, $telegram, $instagram) {
     $sql = "UPDATE users SET vk=:vk, telegram=:telegram, instagram=:instagram WHERE id=:id";
     $statement = $pdo->prepare($sql);
