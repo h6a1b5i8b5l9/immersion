@@ -5,6 +5,7 @@ $pdo = new PDO("mysql:host=localhost;dbname=immersion", "root", "root");
 
 $logged_user = is_email_in_db($_SESSION['email'], $pdo);
 $user_id = $_GET['id'];
+$user = get_user_by_id($user_id, $pdo);
 
 if(!isset($_SESSION['email'])) {
     redirect_to_page('login.php');
@@ -13,6 +14,11 @@ if(!isset($_SESSION['email'])) {
 }
 
 delete_user($pdo, $user_id);
+
+if(!empty($user['avatar'])) {
+    unlink($user['avatar']);
+}
+
 
 if($logged_user['id'] != $user_id) {
     redirect_to_page("users.php");
