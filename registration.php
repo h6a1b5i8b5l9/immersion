@@ -1,28 +1,21 @@
 <?php
 session_start();
+include 'functions.php';
 
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-
 $pdo = new PDO("mysql:host=localhost;dbname=immersion", "root", "root");
 
+$task = is_email_in_db($email, $pdo);
 
-$sql = "SELECT * FROM registration WHERE email=:email";
-$statement = $pdo->prepare($sql);
-$statement->execute(['email'=>$email]);
-$task = $statement->fetch(PDO::FETCH_ASSOC);
 
 if(!empty($task)) {
-    $message = 'Этот эл. адрес уже занят другим пользователем.';
-    $_SESSION['danger'] = $message;
-    header('Location: page_register.php');
-    exit();
+    set_flash_message('danger', 'Этот эл. адрес уже занят другим пользователем.');
+    redirect_to_page('page_register.php');
 }
 
-$sql = "INSERT INTO registration (email, password) VALUES (:email, :password)";
-$statement = $pdo->prepare($sql);
-$statement->execute(['email'=>$email, 'password'=>$password]);
-$message = 'Регистрация успешна';
-$_SESSION['success'] = $message;
-header('Location: page_login.php');
+create_new_user($pdo, $email, $password );
+
+set_flash_message('success', 'Регистрация успешна');
+redirect_to_page('page_login.php');

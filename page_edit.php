@@ -6,10 +6,10 @@ $pdo = new PDO("mysql:host=localhost;dbname=immersion", "root", "root");
 
 $edit_id = $_GET['id'];
 $logged_user = is_email_in_db($_SESSION['email'], $pdo);
+$user = get_user_by_id($edit_id, $pdo);
 
 
-
-if(!isset($logged_user)) {
+if(!isset($_SESSION['email'])) {
     redirect_to_page('login.php');
 } elseif ($logged_user['role'] !== 'admin' && $logged_user['id'] !== $edit_id) {
     redirect_to_page('users.php');
@@ -67,25 +67,25 @@ if(!isset($logged_user)) {
                                 <!-- username -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Иван иванов" name="update_name">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?php echo $user['name'] ?>" name="update_name">
                                 </div>
 
                                 <!-- title -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Место работы</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Marlin Веб-разработчик" name="update_position">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?php echo $user['position'] ?>" name="update_position">
                                 </div>
 
                                 <!-- tel -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="8 888 8888 88" name="update_telephone">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?php echo $user['telephone'] ?>" name="update_telephone">
                                 </div>
 
                                 <!-- address -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Восточные Королевства, Штормград" name="update_address">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?php echo $user['address'] ?>" name="update_address">
                                 </div>
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
                                     <button class="btn btn-warning">Редактировать</button>
